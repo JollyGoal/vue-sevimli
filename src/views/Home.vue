@@ -81,7 +81,7 @@
               7.9/10
             </div>
           </div>
-          <div class="main-title">Winter is coming</div>
+          <div class="main-title">Winter Is Coming</div>
           <div class="main-description">
             Elementum. Hic lorem ultrices. Eius, quasi dapibus suscipit ut massa
             litora sed, aliquet molestias, adipisci provident tenetur? Curae aut
@@ -97,26 +97,31 @@
             <div class="play-label">Watch Trailer</div>
           </div>
         </div>
-        <div style="width: 5%; height: 1px;"></div>
+        <div style="width: 5%; height: 1px"></div>
         <div class="middle-right">
-          <div class="right-top">
+          <div class="right-top" ref="episodes_scroll">
             <div
               class="carousel-item"
               v-for="(episode, index) in episodes"
               :key="index"
             >
               <img class="carousel-item-image" :src="episode.poster" />
+              <div class="carousel-item-content">
+                <div class="episode-meta">Episode {{index + 1}}</div>
+                <div class="episode-title">{{ episode.title }}</div>
+                <div class="episode-meta"><i class="fas fa-star" style="padding-right:8px;"></i>{{ episode.rating }}</div>
+              </div>
             </div>
           </div>
           <div class="right-bottom">
             <div style="display: flex">
-              <button class="button-container">
+              <button class="button-container" @click="episodesScroll(-1)">
                 <div class="flat-icon-button-holder">
                   <i class="far fa-chevron-left" style=""></i>
                 </div>
               </button>
               <div style="width: 16px"></div>
-              <button class="button-container">
+              <button class="button-container" @click="episodesScroll(1)">
                 <div class="flat-icon-button-holder">
                   <i class="far fa-chevron-right" style=""></i>
                 </div>
@@ -199,6 +204,13 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    episodesScroll(dir) {
+      this.scroll = (this.$refs.episodes_scroll.offsetWidth / 1.5) * dir;
+
+      this.$refs.episodes_scroll.scrollBy({ left: this.scroll });
+    },
   },
 };
 </script>
@@ -467,8 +479,18 @@ export default {
   height: 500px;
   display: flex;
   align-items: center;
-  overflow-x: scroll;
+  overflow-x: visible;
   overflow-y: hidden;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.right-top::-webkit-scrollbar {
+  display: none;
+  -webkit-appearance: none;
+  width: 0;
+  height: 0;
 }
 
 .carousel-item {
@@ -476,7 +498,7 @@ export default {
   background-color: white;
   border-radius: 12px;
   height: 350px;
-  width: 245px ;
+  width: 245px;
   margin: 0 20px;
   cursor: pointer;
   transition: all 0.2s;
@@ -488,7 +510,7 @@ export default {
   left: 0;
   border-radius: 12px;
   height: 350px;
-  width: 245px ;
+  width: 245px;
   pointer-events: none;
   transition: all 0.2s;
 }
@@ -496,7 +518,6 @@ export default {
 .carousel-item:hover {
   height: 400px;
   width: 280px;
-  
 }
 
 .carousel-item:hover .carousel-item-image {
@@ -508,8 +529,27 @@ export default {
   margin: 0 20px 0 0;
 }
 
-.right-top div:last-child .carousel-item-image{
+.right-top div:last-child .carousel-item-image {
   margin-right: 70px;
+}
+
+.carousel-item-content {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.episode-meta {
+  text-align: start;
+}
+
+.episode-title {
+  text-align: start;
+  font-weight: bold;
+  font-size: 1.3em;
+  padding: 10px 0 12px 0;
 }
 
 </style>
