@@ -99,17 +99,22 @@
         </div>
         <div style="width: 5%; height: 1px"></div>
         <div class="middle-right">
-          <div class="right-top" ref="episodes_scroll">
-            <div
-              class="carousel-item"
-              v-for="(episode, index) in episodes"
-              :key="index"
-            >
-              <img class="carousel-item-image" :src="episode.poster" />
-              <div class="carousel-item-content">
-                <div class="episode-meta">Episode {{index + 1}}</div>
-                <div class="episode-title">{{ episode.title }}</div>
-                <div class="episode-meta"><i class="fas fa-star" style="padding-right:8px;"></i>{{ episode.rating }}</div>
+          <div class="right-top">
+            <div class="carousel" ref="episodes_scroll" @scroll="fixedScroll">
+              <div
+                class="carousel-item"
+                v-for="(episode, index) in episodes"
+                :key="index"
+              >
+                <img class="carousel-item-image" :src="episode.poster" />
+                <div class="carousel-item-content">
+                  <div class="episode-meta">Episode {{ index + 1 }}</div>
+                  <div class="episode-title">{{ episode.title }}</div>
+                  <div class="episode-meta">
+                    <i class="fas fa-star" style="padding-right: 8px"></i
+                    >{{ episode.rating }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -164,6 +169,7 @@ export default {
   },
   data() {
     return {
+      episode_scroller_timer: null,
       recommendations: [{}],
       episodes: [
         {
@@ -207,9 +213,18 @@ export default {
   },
   methods: {
     episodesScroll(dir) {
-      this.scroll = (this.$refs.episodes_scroll.offsetWidth / 1.5) * dir;
+      this.scroll = (this.$refs.episodes_scroll.offsetHeight / 1.5) * dir;
+      this.$refs.episodes_scroll.scrollBy({ top: this.scroll });
+    },
+    fixedScroll() {
+      // clearTimeout(this.episode_scroller_timer);
+      
+      //   elem.scrollBy({ top: 100 });
 
-      this.$refs.episodes_scroll.scrollBy({ left: this.scroll });
+      // this.episode_scroller_timer = setTimeout((elem) => {
+      //   console.log("me")
+      //   clearTimeout(this.episode_scroller_timer);
+      // }, 200, this.$refs.episodes_scroll);
     },
   },
 };
@@ -477,20 +492,27 @@ export default {
   position: relative;
   width: 100%;
   height: 500px;
-  display: flex;
-  align-items: center;
-  overflow-x: visible;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
 
-.right-top::-webkit-scrollbar {
+.carousel::-webkit-scrollbar {
   display: none;
   -webkit-appearance: none;
   width: 0;
   height: 0;
+}
+
+.carousel {
+  position: absolute;
+  width: 500px;
+  height: 800px;
+  right: 0;
+  overflow-y: auto;
+  transform: rotate(-90deg) translateY(-800px);
+  transform-origin: right top;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
 }
 
 .carousel-item {
@@ -499,9 +521,12 @@ export default {
   border-radius: 12px;
   height: 350px;
   width: 245px;
-  margin: 0 20px;
   cursor: pointer;
   transition: all 0.2s;
+  transform: rotate(90deg) translateY(-200px) translateX(300px);
+  transform-origin: right top;
+  margin-top: -50px;
+  scroll-snap-align: start;
 }
 
 .carousel-item-image {
@@ -516,22 +541,21 @@ export default {
 }
 
 .carousel-item:hover {
-  height: 400px;
-  width: 280px;
+  transform: rotate(90deg) translateY(-200px) translateX(300px);
 }
 
 .carousel-item:hover .carousel-item-image {
-  height: 400px;
-  width: 280px;
+  /* height: 400px;
+  width: 280px; */
 }
 
-.right-top div:first-child {
+/* .right-top div:first-child {
   margin: 0 20px 0 0;
 }
 
 .right-top div:last-child .carousel-item-image {
   margin-right: 70px;
-}
+} */
 
 .carousel-item-content {
   position: absolute;
@@ -551,5 +575,4 @@ export default {
   font-size: 1.3em;
   padding: 10px 0 12px 0;
 }
-
 </style>
