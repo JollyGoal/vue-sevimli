@@ -43,7 +43,7 @@
               <button class="button-container">
                 <div class="icon-button-holder">
                   <i
-                    class="fal fa-bars"
+                    class="far fa-user"
                     style="color: white; font-size: 22px"
                   ></i>
                 </div>
@@ -99,34 +99,49 @@
         </div>
         <div style="width: 5%; height: 1px"></div>
         <div class="middle-right">
-          <div class="right-top">
-            <div class="carousel" ref="episodes_scroll" @scroll="fixedScroll">
-              <div
-                class="carousel-item"
-                v-for="(episode, index) in episodes"
-                :key="index"
-              >
-                <img class="carousel-item-image" :src="episode.poster" />
-                <div class="carousel-item-content">
-                  <div class="episode-meta">Episode {{ index + 1 }}</div>
-                  <div class="episode-title">{{ episode.title }}</div>
-                  <div class="episode-meta">
-                    <i class="fas fa-star" style="padding-right: 8px"></i
-                    >{{ episode.rating }}
-                  </div>
+          <div
+            class="right-top"
+            ref="episodes_scroll"
+            @wheel.prevent="episodesScroll"
+            @scroll="setButtons"
+          >
+            <div
+              class="carousel-item"
+              :class="index + 1 === active_episode_index ? 'active' : ''"
+              v-for="(episode, index) in episodes"
+              :key="index"
+            >
+              <img class="carousel-item-image" :src="episode.poster" />
+              <div class="carousel-item-content">
+                <div class="episode-meta">Episode {{ index + 1 }}</div>
+                <div class="episode-title">{{ episode.title }}</div>
+                <div class="episode-meta">
+                  <i class="fas fa-star" style="padding-right: 8px"></i
+                  >{{ episode.rating }}
                 </div>
               </div>
+            </div>
+            <div>
+              <div ref="ep_scroll_spacer" style="height: 245px"></div>
             </div>
           </div>
           <div class="right-bottom">
             <div style="display: flex">
-              <button class="button-container" @click="episodesScroll(-1)">
+              <button
+                class="button-container"
+                :class="indicator.leftBtn"
+                @click="episodesScroll(-1)"
+              >
                 <div class="flat-icon-button-holder">
                   <i class="far fa-chevron-left" style=""></i>
                 </div>
               </button>
               <div style="width: 16px"></div>
-              <button class="button-container" @click="episodesScroll(1)">
+              <button
+                class="button-container"
+                :class="indicator.rightBtn"
+                @click="episodesScroll(1)"
+              >
                 <div class="flat-icon-button-holder">
                   <i class="far fa-chevron-right" style=""></i>
                 </div>
@@ -141,7 +156,9 @@
                 letter-spacing: 2px;
               "
             >
-              <div>01</div>
+              <div style="cursor: pointer" @click="episodesScroll('start')">
+                01
+              </div>
               <div
                 style="
                   width: 35px;
@@ -150,7 +167,9 @@
                   margin: 0 20px;
                 "
               ></div>
-              <div>10</div>
+              <div style="cursor: pointer" @click="episodesScroll('end')">
+                {{ ("0" + episodes.length).slice(-2) }}
+              </div>
             </div>
           </div>
         </div>
@@ -169,8 +188,12 @@ export default {
   },
   data() {
     return {
-      episode_scroller_timer: null,
+      indicator: {
+        leftBtn: "disabled",
+        rightBtn: "",
+      },
       recommendations: [{}],
+      active_episode_index: 1,
       episodes: [
         {
           title: "Dragon Stone",
@@ -179,9 +202,33 @@ export default {
           rating: "9,3",
         },
         {
+          title: "Winter is coming",
+          poster:
+            "https://www.themoviedb.org/t/p/original/rlKI5ErcB5dhcvkpb8RAuDkBdhO.jpg",
+          rating: "6,2",
+        },
+        {
+          title: "White Dead",
+          poster:
+            "https://www.themoviedb.org/t/p/original/mc2dQBpxR1vJpOOqZVAqY9sQHOc.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Crown",
+          poster:
+            "https://www.themoviedb.org/t/p/original/fnpyUJ2Y2xk9mMQUrcRB4JNnCHT.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Throne",
+          poster:
+            "https://www.themoviedb.org/t/p/original/4KHspQhxzwKV52g1y8fNcqgtro1.jpg",
+          rating: "9,3",
+        },
+        {
           title: "Dragon Stone",
           poster:
-            "https://www.themoviedb.org/t/p/original/bw6DlqljVFIinhBA7uDSNha6Lnp.jpg",
+            "https://www.themoviedb.org/t/p/original/5Hpk46yTgrnGB12fVATs1GUQfi.jpg",
           rating: "9,3",
         },
         {
@@ -191,9 +238,33 @@ export default {
           rating: "9,3",
         },
         {
+          title: "Winter is coming",
+          poster:
+            "https://www.themoviedb.org/t/p/original/rlKI5ErcB5dhcvkpb8RAuDkBdhO.jpg",
+          rating: "6,2",
+        },
+        {
+          title: "White Dead",
+          poster:
+            "https://www.themoviedb.org/t/p/original/mc2dQBpxR1vJpOOqZVAqY9sQHOc.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Crown",
+          poster:
+            "https://www.themoviedb.org/t/p/original/fnpyUJ2Y2xk9mMQUrcRB4JNnCHT.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Throne",
+          poster:
+            "https://www.themoviedb.org/t/p/original/4KHspQhxzwKV52g1y8fNcqgtro1.jpg",
+          rating: "9,3",
+        },
+        {
           title: "Dragon Stone",
           poster:
-            "https://www.themoviedb.org/t/p/original/bw6DlqljVFIinhBA7uDSNha6Lnp.jpg",
+            "https://www.themoviedb.org/t/p/original/5Hpk46yTgrnGB12fVATs1GUQfi.jpg",
           rating: "9,3",
         },
         {
@@ -203,28 +274,139 @@ export default {
           rating: "9,3",
         },
         {
+          title: "Winter is coming",
+          poster:
+            "https://www.themoviedb.org/t/p/original/rlKI5ErcB5dhcvkpb8RAuDkBdhO.jpg",
+          rating: "6,2",
+        },
+        {
+          title: "White Dead",
+          poster:
+            "https://www.themoviedb.org/t/p/original/mc2dQBpxR1vJpOOqZVAqY9sQHOc.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Crown",
+          poster:
+            "https://www.themoviedb.org/t/p/original/fnpyUJ2Y2xk9mMQUrcRB4JNnCHT.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Throne",
+          poster:
+            "https://www.themoviedb.org/t/p/original/4KHspQhxzwKV52g1y8fNcqgtro1.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Dragon Stone",
+          poster:
+            "https://www.themoviedb.org/t/p/original/5Hpk46yTgrnGB12fVATs1GUQfi.jpg",
+          rating: "9,3",
+        },
+        {
           title: "Dragon Stone",
           poster:
             "https://www.themoviedb.org/t/p/original/bw6DlqljVFIinhBA7uDSNha6Lnp.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Winter is coming",
+          poster:
+            "https://www.themoviedb.org/t/p/original/rlKI5ErcB5dhcvkpb8RAuDkBdhO.jpg",
+          rating: "6,2",
+        },
+        {
+          title: "White Dead",
+          poster:
+            "https://www.themoviedb.org/t/p/original/mc2dQBpxR1vJpOOqZVAqY9sQHOc.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Crown",
+          poster:
+            "https://www.themoviedb.org/t/p/original/fnpyUJ2Y2xk9mMQUrcRB4JNnCHT.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Throne",
+          poster:
+            "https://www.themoviedb.org/t/p/original/4KHspQhxzwKV52g1y8fNcqgtro1.jpg",
+          rating: "9,3",
+        },
+        {
+          title: "Dragon Stone",
+          poster:
+            "https://www.themoviedb.org/t/p/original/5Hpk46yTgrnGB12fVATs1GUQfi.jpg",
           rating: "9,3",
         },
       ],
     };
   },
-  methods: {
-    episodesScroll(dir) {
-      this.scroll = (this.$refs.episodes_scroll.offsetHeight / 1.5) * dir;
-      this.$refs.episodes_scroll.scrollBy({ top: this.scroll });
-    },
-    fixedScroll() {
-      // clearTimeout(this.episode_scroller_timer);
-      
-      //   elem.scrollBy({ top: 100 });
+  mounted: function () {
+    // Add episodes carousel placeholder
+    this.setCaruselEmpty();
 
-      // this.episode_scroller_timer = setTimeout((elem) => {
-      //   console.log("me")
-      //   clearTimeout(this.episode_scroller_timer);
-      // }, 200, this.$refs.episodes_scroll);
+  },
+  watch: {},
+  methods: {
+    setCaruselEmpty() {
+      this.newWidth = this.$refs.episodes_scroll.offsetWidth - 285;
+      this.$refs.ep_scroll_spacer.style.width = this.newWidth.toString() + "px";
+    },
+    setButtons() {
+      this.indicator.leftBtn =
+        this.$refs.episodes_scroll.scrollLeft === 0 ? "disabled" : "";
+      // this.indicator.rightBtn =
+      this.indicator.rightBtn =
+        this.$refs.episodes_scroll.scrollLeft +
+          285 +
+          this.$refs.ep_scroll_spacer.offsetWidth -
+          this.$refs.episodes_scroll.scrollWidth >=
+          -40 ? "disabled" : ""
+    },
+    episodesScroll(dir) {
+      // console.log(dir);
+      if (dir === "end") {
+        this.handleAfterScroll(1000);
+        this.$refs.episodes_scroll.scrollBy({
+          left: this.$refs.episodes_scroll.scrollWidth,
+        });
+        return;
+      } else if (dir === "start") {
+        this.handleAfterScroll(1000);
+        this.$refs.episodes_scroll.scrollBy({
+          left: -this.$refs.episodes_scroll.scrollWidth,
+        });
+        return;
+      }
+      this.handleAfterScroll();
+
+      if (dir.deltaY > 0 || dir.deltaX > 0) {
+        this.$refs.episodes_scroll.scrollBy({ left: 280 });
+        return;
+      }
+
+      if (dir.deltaY < 0 || dir.deltaX < 0) {
+        this.$refs.episodes_scroll.scrollBy({ left: -280 });
+        return;
+      }
+
+      // if (dir.deltaY !== 0 || dir.deltaXd !== 0) {
+      //   this.$refs.episodes_scroll.scrollBy({ left: 280 });
+      //   return
+      // }
+
+      // this.scroll = (this.$refs.episodes_scroll.offsetWidth / 1.5) * dir;
+      this.scroll = 280 * dir;
+      this.$refs.episodes_scroll.scrollBy({ left: this.scroll });
+    },
+    handleAfterScroll(timeout = 500) {
+      if (this.episode_timer) clearTimeout(this.episode_timer);
+
+      this.episode_timer = setTimeout(() => {
+        this.index = Math.round(this.$refs.episodes_scroll.scrollLeft / 285);
+        this.active_episode_index = this.index + 1;
+      }, timeout);
     },
   },
 };
@@ -338,6 +520,19 @@ export default {
   cursor: pointer;
 }
 
+.button-container.disabled {
+  cursor: not-allowed;
+}
+
+.button-container.disabled .flat-icon-button-holder {
+  background-color: rgba(66, 66, 66, 0.3);
+  border: 1px solid rgba(66, 66, 66, 1) !important;
+  color: rgba(66, 66, 66, 1);
+}
+
+.button-container.disabled .flat-icon-button-holder:hover {
+}
+
 .flat-button-holder {
   border-radius: 44px;
   border: 1px solid rgba(255, 255, 255, 0.6) !important;
@@ -384,7 +579,7 @@ export default {
 
 .flat-icon-button-holder:hover {
   background-color: rgba(255, 255, 255, 1);
-  color: black !important;
+  color: black;
 }
 
 .icon-button-holder:hover {
@@ -492,70 +687,62 @@ export default {
   position: relative;
   width: 100%;
   height: 500px;
+  display: flex;
+  align-items: center;
+  overflow-x: visible;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+  scroll-snap-type: x proximity;
 }
 
-.carousel::-webkit-scrollbar {
+.right-top::-webkit-scrollbar {
   display: none;
   -webkit-appearance: none;
   width: 0;
   height: 0;
 }
 
-.carousel {
-  position: absolute;
-  width: 500px;
-  height: 800px;
-  right: 0;
-  overflow-y: auto;
-  transform: rotate(-90deg) translateY(-800px);
-  transform-origin: right top;
-  scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
-}
-
 .carousel-item {
   position: relative;
-  background-color: white;
-  border-radius: 12px;
+  scroll-snap-align: start;
+  border-radius: 14px;
   height: 350px;
   width: 245px;
+  margin: 0 20px;
   cursor: pointer;
-  transition: all 0.2s;
-  transform: rotate(90deg) translateY(-200px) translateX(300px);
-  transform-origin: right top;
-  margin-top: -50px;
-  scroll-snap-align: start;
+  transition: all 0.15s;
 }
 
 .carousel-item-image {
   position: relative;
   top: 0;
   left: 0;
-  border-radius: 12px;
+  background-color: white;
+  border-radius: 14px;
+  object-fit: cover;
   height: 350px;
   width: 245px;
   pointer-events: none;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 
-.carousel-item:hover {
-  transform: rotate(90deg) translateY(-200px) translateX(300px);
+.carousel-item.active {
+  /* transform: scale(1.05); */
+  height: 400px;
+  width: 280px;
 }
 
-.carousel-item:hover .carousel-item-image {
-  /* height: 400px;
-  width: 280px; */
+.carousel-item.active .carousel-item-image {
+  /* transform: scale(1.05); */
+  height: 400px;
+  width: 280px;
 }
 
-/* .right-top div:first-child {
+.right-top div:first-child {
   margin: 0 20px 0 0;
 }
-
-.right-top div:last-child .carousel-item-image {
-  margin-right: 70px;
-} */
 
 .carousel-item-content {
   position: absolute;
