@@ -11,92 +11,63 @@
         ></video>
         <div class="main-video-wrapper"></div>
       </div>
-      <div class="app-bar-wrapper">
-        <div class="app-bar">
-          <div class="app-bar-left">
-            <img class="sev-logo" src="../assets/logo_white.png" />
-            <div style="padding-left: 50px">
-              <button class="button-container">
-                <div class="flat-button-holder">Popular</div>
-              </button>
-            </div>
-          </div>
-          <div class="app-bar-right">
-            <div class="main-navigation">
-              <div class="nav-indicator"></div>
-              <span class="nav-elem">Series</span>
-              <span class="nav-elem">Movies</span>
-              <span class="nav-elem">Serials</span>
-              <span class="nav-elem">Sports</span>
-              <span class="nav-elem">Kids</span>
-            </div>
-            <div class="nav-actions">
-              <button class="button-container">
-                <div class="icon-button-holder">
-                  <i
-                    class="far fa-search"
-                    style="color: white; font-size: 22px"
-                  ></i>
-                </div>
-              </button>
-              <div style="width: 30px"></div>
-              <button class="button-container">
-                <div class="icon-button-holder">
-                  <i
-                    class="far fa-user"
-                    style="color: white; font-size: 22px"
-                  ></i>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      <Header></Header>
+      
       <div class="main-container">
-        <div class="dots-container">
-          <div class="dot-indicator"></div>
-          <div class="dot-divider"></div>
-          <div class="dot-indicator"></div>
-          <div class="dot-divider"></div>
-          <div class="dot-indicator"></div>
-          <div class="dot-divider"></div>
-          <div class="dot-indicator"></div>
-          <div class="dot-divider"></div>
-          <div class="dot-indicator"></div>
-          <div class="dot-divider"></div>
-          <div class="dot-indicator"></div>
-          <div class="dot-divider"></div>
-          <div class="dot-indicator"></div>
-          <div class="dot-divider"></div>
-          <div class="dot-indicator"></div>
-        </div>
-        <div class="middle-left">
-          <div class="main-rating">
-            <i class="fas fa-star main-rating-star"></i>
-            <i class="fas fa-star main-rating-star"></i>
-            <i class="fas fa-star main-rating-star"></i>
-            <i class="fas fa-star-half-alt main-rating-star"></i>
-            <i class="fal fa-star main-rating-star"></i>
-            <div style="padding-left: 10px" class="main-description">
-              7.9/10
+        <transition name="left" appear>
+          <div
+            class="dots-container"
+            @click="
+              episodes.push(episodes[0], episodes[1], episodes[2], episodes[3])
+            "
+          >
+            <div class="dot-indicator"></div>
+            <div class="dot-divider"></div>
+            <div class="dot-indicator"></div>
+            <div class="dot-divider"></div>
+            <div class="dot-indicator"></div>
+            <div class="dot-divider"></div>
+            <div class="dot-indicator"></div>
+            <div class="dot-divider"></div>
+            <div class="dot-indicator"></div>
+            <div class="dot-divider"></div>
+            <div class="dot-indicator"></div>
+            <div class="dot-divider"></div>
+            <div class="dot-indicator"></div>
+            <div class="dot-divider"></div>
+            <div class="dot-indicator"></div>
+          </div>
+        </transition>
+        <transition name="fadetop" appear>
+          <div v-if="showP" class="middle-left">
+            <div class="main-rating">
+              <i class="fas fa-star main-rating-star"></i>
+              <i class="fas fa-star main-rating-star"></i>
+              <i class="fas fa-star main-rating-star"></i>
+              <i class="fas fa-star-half-alt main-rating-star"></i>
+              <i class="fal fa-star main-rating-star"></i>
+              <div style="padding-left: 10px" class="main-description">
+                7.9/10
+              </div>
+            </div>
+            <div class="main-title">Winter Is Coming</div>
+            <div class="main-description">
+              Elementum. Hic lorem ultrices. Eius, quasi dapibus suscipit ut
+              massa litora sed, aliquet molestias, adipisci provident tenetur?
+              Curae aut earum.Aenean repudiandae lacus. Mollitia ducimus
+              ultricies qui tellus do, nisi tempus, voluptatibus sequi.
+            </div>
+            <div class="main-play-area">
+              <button class="button-container">
+                <div class="flat-icon-button-holder">
+                  <i class="far fa-play" style="transform: translateX(2px)"></i>
+                </div>
+              </button>
+              <div class="play-label">Watch Trailer</div>
             </div>
           </div>
-          <div class="main-title">Winter Is Coming</div>
-          <div class="main-description">
-            Elementum. Hic lorem ultrices. Eius, quasi dapibus suscipit ut massa
-            litora sed, aliquet molestias, adipisci provident tenetur? Curae aut
-            earum.Aenean repudiandae lacus. Mollitia ducimus ultricies qui
-            tellus do, nisi tempus, voluptatibus sequi.
-          </div>
-          <div class="main-play-area">
-            <button class="button-container">
-              <div class="flat-icon-button-holder">
-                <i class="far fa-play" style="transform: translateX(2px)"></i>
-              </div>
-            </button>
-            <div class="play-label">Watch Trailer</div>
-          </div>
-        </div>
+        </transition>
         <div style="width: 5%; height: 1px"></div>
         <div class="middle-right">
           <div
@@ -105,24 +76,42 @@
             @wheel.prevent="episodesScroll"
             @scroll="setButtons"
           >
-            <div
-              class="carousel-item"
-              :class="index + 1 === active_episode_index ? 'active' : ''"
-              v-for="(episode, index) in episodes"
-              :key="index"
-            >
-              <img class="carousel-item-image" :src="episode.poster" />
-              <div class="carousel-item-content">
-                <div class="episode-meta">Episode {{ index + 1 }}</div>
-                <div class="episode-title">{{ episode.title }}</div>
-                <div class="episode-meta">
-                  <i class="fas fa-star" style="padding-right: 8px"></i
-                  >{{ episode.rating }}
+            <transition-group name="carousellist" appear>
+              <div
+                class="carousel-item"
+                :class="index + 1 === active_episode_index ? 'active' : ''"
+                v-for="(episode, index) in episodes"
+                :key="index"
+              >
+                <img class="carousel-item-image" :src="episode.poster" />
+                <div class="carousel-item-content">
+                  <div class="episode-meta">Episode {{ index + 1 }}</div>
+                  <div class="episode-title">{{ episode.title }}</div>
+                  <div class="episode-meta">
+                    <i class="fas fa-star" style="padding-right: 8px"></i
+                    >{{ episode.rating }}
+                  </div>
                 </div>
               </div>
-            </div>
+            </transition-group>
+            
             <div>
-              <div ref="ep_scroll_spacer" style="height: 245px"></div>
+              <div ref="ep_scroll_spacer" style="height: 245px; display: flex; justify-content: center; align-items:center;">
+                <div class="lds-spinner">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+              </div>
             </div>
           </div>
           <div class="right-bottom">
@@ -179,12 +168,12 @@
 </template>
 
 <script>
-// import Header from "../components/Header"
+import Header from '../components/Header.vue';
 
 export default {
   name: "Home",
   components: {
-    // Header,
+    Header,
   },
   data() {
     return {
@@ -192,6 +181,7 @@ export default {
         leftBtn: "disabled",
         rightBtn: "",
       },
+      showP: true,
       recommendations: [{}],
       active_episode_index: 1,
       episodes: [
@@ -345,7 +335,6 @@ export default {
   mounted: function () {
     // Add episodes carousel placeholder
     this.setCaruselEmpty();
-
   },
   watch: {},
   methods: {
@@ -362,7 +351,9 @@ export default {
           285 +
           this.$refs.ep_scroll_spacer.offsetWidth -
           this.$refs.episodes_scroll.scrollWidth >=
-          -40 ? "disabled" : ""
+        -40
+          ? "disabled"
+          : "";
     },
     episodesScroll(dir) {
       // console.log(dir);
@@ -417,7 +408,7 @@ export default {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-color: #ecebec;
+  background-color: #000;
   color: white;
   display: flex;
   flex-direction: column;
@@ -440,154 +431,6 @@ export default {
   width: 100vw;
   height: 100vh;
   object-fit: cover;
-}
-
-.app-bar-wrapper {
-  position: relative;
-  height: 100px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.app-bar {
-  height: 100%;
-  width: 94%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.app-bar-left {
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.app-bar-right {
-  display: flex;
-  height: 100%;
-}
-
-.main-navigation {
-  display: flex;
-  position: relative;
-  height: 100%;
-  align-items: center;
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.nav-elem {
-  margin-right: 50px;
-  cursor: pointer;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.9);
-  transition: all 0.2s, transform 0.25s;
-}
-
-.nav-elem:hover {
-  color: rgba(255, 255, 255, 1);
-  /* transform: scale(1.05); */
-}
-
-.nav-indicator {
-  position: absolute;
-  width: 40px;
-  height: 2px;
-  background-color: white;
-  bottom: 26px;
-  left: 0;
-  pointer-events: none;
-}
-
-.nav-actions {
-  position: relative;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding-left: 40px;
-}
-
-.button-container {
-  user-select: none;
-  outline: none;
-  appearance: none;
-  background-color: transparent;
-  cursor: pointer;
-}
-
-.button-container.disabled {
-  cursor: not-allowed;
-}
-
-.button-container.disabled .flat-icon-button-holder {
-  background-color: rgba(66, 66, 66, 0.3);
-  border: 1px solid rgba(66, 66, 66, 1) !important;
-  color: rgba(66, 66, 66, 1);
-}
-
-.button-container.disabled .flat-icon-button-holder:hover {
-}
-
-.flat-button-holder {
-  border-radius: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.6) !important;
-  padding: 10px 36px;
-  font-size: 0.9em;
-  background-color: transparent;
-  color: white;
-  transition: all 0.2s;
-  font-weight: 600;
-  backdrop-filter: blur(30px);
-}
-
-.flat-button-holder:hover {
-  background-color: white;
-  color: black;
-}
-
-.icon-button-holder {
-  width: 55px;
-  height: 55px;
-  background-color: transparent;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  backdrop-filter: blur(8px);
-}
-
-.flat-icon-button-holder {
-  width: 55px;
-  height: 55px;
-  background-color: transparent;
-  border: 1px solid #fff !important;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  font-size: 20px;
-  color: white;
-  backdrop-filter: blur(30px);
-}
-
-.flat-icon-button-holder:hover {
-  background-color: rgba(255, 255, 255, 1);
-  color: black;
-}
-
-.icon-button-holder:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.sev-logo {
-  height: 100%;
 }
 
 .main-container {
@@ -761,5 +604,19 @@ export default {
   font-weight: bold;
   font-size: 1.3em;
   padding: 10px 0 12px 0;
+}
+
+.carousellist-enter-active,
+.carousellist-leave-active {
+  transition: opacity 0.4s ease-in-out, all 0.8s cubic-bezier(0.64, 0, 0.78, 0);
+}
+.carousellist-enter-from,
+.carousellist-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.carousellist-move {
+  transition: all 0.3s ease;
 }
 </style>
