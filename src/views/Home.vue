@@ -51,7 +51,7 @@
                 7.9/10
               </div>
             </div>
-            <div class="main-title">Winter Is Coming</div>
+            <div class="main-title">{{ episodes[active_episode_index-1].title }}</div>
             <div class="main-description">
               Elementum. Hic lorem ultrices. Eius, quasi dapibus suscipit ut
               massa litora sed, aliquet molestias, adipisci provident tenetur?
@@ -391,7 +391,7 @@ export default {
       this.scroll = 280 * dir;
       this.$refs.episodes_scroll.scrollBy({ left: this.scroll });
     },
-    handleAfterScroll(timeout = 500) {
+    handleAfterScroll(timeout = 300) {
       if (this.episode_timer) clearTimeout(this.episode_timer);
 
       this.episode_timer = setTimeout(() => {
